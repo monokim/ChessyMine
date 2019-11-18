@@ -3,6 +3,7 @@ import pyautogui
 import numpy as np
 import time
 import torch
+import win32gui
 
 def get_screen(screen, size=(96, 96)):
     image = pyautogui.screenshot(region=screen)
@@ -20,10 +21,13 @@ def get_screen_rect(caption='Minecraft 1.11.2'):
 
 def click_point(pos=None):
     pyautogui.click(pos)
-    #pyautogui.mouseDown(x, y)
-    #pyautogui.mouseUp()
 
 def press_key(key):
     pyautogui.keyDown(key)
     time.sleep(0.1)
     pyautogui.keyUp(key)
+
+def type_command(comm):
+    for c in comm:
+        pyautogui.press(c)
+    pyautogui.press('enter')
