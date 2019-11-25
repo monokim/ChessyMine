@@ -3,11 +3,11 @@ import numpy as np
 import math
 import random
 import matplotlib.pyplot as plt
-import util
 
 import gym
 import gym_game
 import torch
+import gym_game.envs.util as util
 
 from dqn import DQN, ReplayMemory
 
@@ -89,7 +89,8 @@ if __name__ == "__main__":
 
     ###############################################
     # modify here!!
-    screen = (x, y, w, h)
+    rect = util.get_screen_rect()
+    screen = (rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1])
     ###############################################
 
     env = gym.make("Game-v0")

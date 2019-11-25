@@ -2,21 +2,24 @@ import gym
 from gym import spaces
 import numpy as np
 from gym_game.envs.game import Game
+import time
 
 class Env(gym.Env):
     metadata = {'render.modes' : ['human']}
     def __init__(self):
         ###############################################
         # modify here!!!
-        self.action_space = spaces.Discrete(16)
+        self.action_space = spaces.Discrete(5)
         ###############################################
-        self.observation_space = spaces.Box(np.array([0, 0]), np.array([15, 1]), dtype=np.int)
         self.game = Game()
         self.memory = []
+        self.counter = 0
 
     def reset(self):
+        self.counter = 0
         del self.game
         self.game = Game()
+        self.init_minecraft_process()
         obs = self.game.observe()
         return obs
 
@@ -25,6 +28,13 @@ class Env(gym.Env):
         reward = self.game.evaluate()
         done = self.game.is_done()
         obs = self.game.observe()
+
+        self.counter += 1
+        if self.counter > 20:
+            print("call zombie")
+            self.game.mine.call_zombie()
+            self.counter = 0
+
         return obs, reward, done, {}
 
     def render(self, mode="human", close=False):
@@ -37,3 +47,13 @@ class Env(gym.Env):
 
     def remember(self, state, action, reward, next_state, done):
         self.memory.append((state, action, reward, next_state, done))
+
+    def init_minecraft_process(self):
+        #self.game.mine.press_resume()
+        time.sleep(1)
+        self.game.mine.press_respawn()
+        self.game.mine.erase_blocks()
+        time.sleep(1)
+        self.game.mine.create_duel_ring()
+        self.game.mine.set_config()
+        self.game.mine.call_zombie()

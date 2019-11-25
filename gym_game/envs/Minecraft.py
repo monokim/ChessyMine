@@ -2,13 +2,14 @@ from mcpi.minecraft import Minecraft
 from pyautogui import press, typewrite
 import pyautogui
 import time
-import util
 
-class Minecraft:
+from gym_game.envs.util import type_command, click_point, get_screen_rect, get_screen, get_pixel
+
+class MyMinecraft:
     def __init__(self):
         self.mc = Minecraft.create()
         self.mc.setting("world_immutable", True)
-        self.mc_rect = util.get_screen_rect()
+        self.mc_rect = get_screen_rect()
 
     def create_duel_ring(self):
         self.erase_blocks()
@@ -41,37 +42,41 @@ class Minecraft:
         y = 50
         z = 0
         erase_size = 100
-        self.mc.setBlocks(x - erase_size, y-1, z - erase_size, x + erase_size, y + erase_size, z + erase_size, 0)
+        self.mc.setBlocks(x - erase_size, y-10, z - erase_size, x + erase_size, y + erase_size, z + erase_size, 0)
 
     def set_config(self):
-        command = ['/op mingoooose', '/give mingoooose iron_sword']
+        command = ['/op mingoooose', '/give mingoooose iron_sword', '/time set 15000']
         for comm in command:
-            util.type_command(comm)
+            type_command(comm)
 
     def call_zombie(self):
         com = '/summon zombie 0 50 10'
-        util.type_command(comm)
+        type_command(com)
 
     def screen(self):
-        return util.get_screen(self.mc_rect)
+        return get_screen(self.mc_rect)
 
     def press_resume(self):
-        x, y, x2, y2 = self.mc_rect
-        util.click_point([(x+x2) / 2, y1 + (y2 - y1) / 3])
+        x1, y1, x2, y2 = self.mc_rect
+        click_point([(x1+x2) / 2, y1 + (y2 - y1) / 3])
+
+    def press_respawn(self):
+        x1, y1, x2, y2 = self.mc_rect
+        click_point([(x1+x2) / 2, y1 + 320])
 
     def get_health_bar(self):
         x, y, _, _ = self.mc_rect
         health = 0
-        pos = [430 + x, 626 + y]
+        pos = [295 + x, 490 + y]
         for i in range(0, 10):
             # left
-            pixel = util.get_pixel(pos)
+            pixel = get_pixel(pos)
             if pixel == [255, 19, 19]:
                 health += 0.5
 
             # right
             pos[0] += 5
-            pixel = util.get_pixel(pos)
+            pixel = get_pixel(pos)
             if pixel == [255, 19, 19]:
                 health += 0.5
 

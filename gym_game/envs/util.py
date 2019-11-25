@@ -5,7 +5,7 @@ import time
 import torch
 import win32gui
 
-def get_screen(screen, size=(96, 96)):
+def get_screen(screen, size=(32, 32)):
     image = pyautogui.screenshot(region=screen)
     image = np.array(image)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -24,7 +24,6 @@ def click_point(pos=None):
 
 def press_key(key):
     pyautogui.keyDown(key)
-    time.sleep(0.1)
     pyautogui.keyUp(key)
 
 def type_command(comm):
