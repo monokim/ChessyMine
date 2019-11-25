@@ -9,12 +9,11 @@ class Env(gym.Env):
     def __init__(self):
         ###############################################
         # modify here!!!
-        self.action_space = spaces.Discrete(5)
+        self.action_space = spaces.Discrete(7)
         ###############################################
         self.game = Game()
         self.memory = []
         self.counter = 0
-
     def reset(self):
         self.counter = 0
         del self.game
@@ -30,7 +29,7 @@ class Env(gym.Env):
         obs = self.game.observe()
 
         self.counter += 1
-        if self.counter > 20:
+        if self.counter > 30:
             print("call zombie")
             self.game.mine.call_zombie()
             self.counter = 0

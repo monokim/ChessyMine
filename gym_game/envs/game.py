@@ -24,13 +24,19 @@ class Game:
             press_key('d')
         elif action == 4:
             click_point()
+        elif action == 5:
+            x1, y1, x2, y2 = self.mine.mc_rect
+            click_point([(x1+x2) * 45 / 100, (y1 + y2) / 2])
+        elif action == 6:
+            x1, y1, x2, y2 = self.mine.mc_rect
+            click_point([(x1+x2) * 55 / 100, (y1 + y2) / 2])
 
     def evaluate(self):
         # return reward
         reward = 0.1
         self.cur_health = self.mine.get_health_bar()
         if self.cur_health < self.prev_health:
-            reward -= 100
+            reward -= 10
         self.prev_health = self.cur_health
         return reward
 

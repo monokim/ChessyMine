@@ -41,7 +41,6 @@ class DQN(nn.Module):
 
         conv_w = conv2d_size_out(conv2d_size_out(conv2d_size_out(width)))
         conv_h = conv2d_size_out(conv2d_size_out(conv2d_size_out(height)))
-        print(conv_w, conv_h)
         linear_input_size = conv_w * conv_h * 32
         self.head = nn.Linear(linear_input_size, outputs)
 

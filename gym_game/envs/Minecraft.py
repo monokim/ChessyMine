@@ -3,7 +3,7 @@ from pyautogui import press, typewrite
 import pyautogui
 import time
 
-from gym_game.envs.util import type_command, click_point, get_screen_rect, get_screen, get_pixel
+from gym_game.envs.util import type_command, click_point, get_screen_rect, get_screen, get_pixel, get_screen_color
 
 class MyMinecraft:
     def __init__(self):
@@ -45,12 +45,12 @@ class MyMinecraft:
         self.mc.setBlocks(x - erase_size, y-10, z - erase_size, x + erase_size, y + erase_size, z + erase_size, 0)
 
     def set_config(self):
-        command = ['/op mingoooose', '/give mingoooose iron_sword', '/time set 15000']
+        command = ['/give mingoooose iron_sword', '/time set 15000']
         for comm in command:
             type_command(comm)
 
     def call_zombie(self):
-        com = '/summon zombie 0 50 10'
+        com = '/summon zombie 0 50 10 {IsBaby:0}'
         type_command(com)
 
     def screen(self):
@@ -64,6 +64,19 @@ class MyMinecraft:
         x1, y1, x2, y2 = self.mc_rect
         click_point([(x1+x2) / 2, y1 + 320])
 
+    def get_strike(self):
+        return False
+        image = get_screen_color(self.mc_rect)
+        w, h, _ = image.shape
+        for y in range(h):
+            for x in range(w):
+                pixel = image[y][x]
+                if (pixel == [59,14,6]).all() or (pixel == [57, 11, 5]).all():
+                    print("strike")
+                    return True
+        print("no strike")
+        return False
+
     def get_health_bar(self):
         x, y, _, _ = self.mc_rect
         health = 0
@@ -73,16 +86,13 @@ class MyMinecraft:
             pixel = get_pixel(pos)
             if pixel == [255, 19, 19]:
                 health += 0.5
-
             # right
             pos[0] += 5
             pixel = get_pixel(pos)
             if pixel == [255, 19, 19]:
                 health += 0.5
-
             # next
             pos[0] += 11
-        print("health : " + str(health))
         return health
 
 # /op mingoooose
