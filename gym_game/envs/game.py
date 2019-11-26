@@ -1,8 +1,10 @@
 import numpy as np
 import time
 import random
+import pyautogui
 from gym_game.envs.Minecraft import MyMinecraft
 from gym_game.envs.util import press_key, click_point
+
 
 ###############################################
 # modify here!!!
@@ -25,11 +27,11 @@ class Game:
         elif action == 4:
             click_point()
         elif action == 5:
-            x1, y1, x2, y2 = self.mine.mc_rect
-            click_point([(x1+x2) * 45 / 100, (y1 + y2) / 2])
+            for i in range(3):
+                pyautogui.moveRel(-20, 0)
         elif action == 6:
-            x1, y1, x2, y2 = self.mine.mc_rect
-            click_point([(x1+x2) * 55 / 100, (y1 + y2) / 2])
+            for i in range(3):
+                pyautogui.moveRel(20, 0)
 
     def evaluate(self):
         # return reward
