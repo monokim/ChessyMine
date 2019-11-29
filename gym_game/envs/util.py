@@ -12,14 +12,13 @@ def get_screen_color(screen, size=(64, 64)):
     return image
 
 
-def get_screen(screen, size=(64, 64)):
+def get_screen(screen, size=(64, 64), device = None):
     image = pyautogui.screenshot(region=screen)
     image = np.array(image)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     image = cv2.resize(image, size)
     image = np.ascontiguousarray(image, dtype=np.float32) / 255
-    image = torch.from_numpy(image).unsqueeze(0).unsqueeze(0)
-    return image
+    return = torch.from_numpy(image).unsqueeze(0).to(device)
 
 def get_screen_rect(caption='Minecraft 1.11.2'):
     hwnd = win32gui.FindWindow(None, caption)

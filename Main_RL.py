@@ -24,7 +24,7 @@ def simulate():
             action = select_action(state)
             _, reward, done, _ = env.step(action.item())
             total_reward += reward
-            reward = torch.tensor([reward])
+            reward = torch.tensor([reward], device=device)
             last_screen = current_screen
             current_screen = util.get_screen(screen)
             if done:
@@ -49,14 +49,14 @@ def optimize_model():
         return
     transition = memory.sample(BATCH_SIZE)
     batch = Transition(*zip(*transition))
-    non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)), dtype=torch.uint8)
+    non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)), device=device, dtype=torch.uint8)
     non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
     state_batch = torch.cat(batch.state)
     action_batch = torch.cat(batch.action)
     reward_batch = torch.cat(batch.reward)
 
     state_action_values = policy_net(state_batch).gather(1, action_batch)
-    next_state_values = torch.zeros(BATCH_SIZE)
+    next_state_values = torch.zeros(BATCH_SIZE, device=device)
     next_state_values[non_final_mask] = target_net(non_final_next_states).max(1)[0].detach()
 
     expected_state_action_values = (next_state_values * GAMMA) + reward_batch
@@ -78,7 +78,7 @@ def select_action(state):
         with torch.no_grad():
             return policy_net(state).max(1)[1].view(1, 1)
     else:
-        return torch.tensor([[random.randrange(n_actions)]], dtype=torch.long)
+        return torch.tensor([[random.randrange(n_actions)]], device=device, dtype=torch.long)
 
 
 if __name__ == "__main__":
@@ -101,10 +101,10 @@ if __name__ == "__main__":
     init_screen = util.get_screen(screen)
     _, _, height, width = init_screen.shape
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     n_actions = env.action_space.n
-
-    policy_net = DQN(width, height, n_actions)
-    target_net = DQN(width, height, n_actions)
+    policy_net = DQN(width, height, n_actions).to(device)
+    target_net = DQN(width, height, n_actions).to(device)
     target_net.load_state_dict(policy_net.state_dict())
     target_net.eval()
 
