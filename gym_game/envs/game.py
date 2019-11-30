@@ -27,10 +27,10 @@ class Game:
         elif action == 4:
             click_point()
         elif action == 5:
-            for i in range(3):
+            for i in range(5):
                 pyautogui.moveRel(-20, 0)
         elif action == 6:
-            for i in range(3):
+            for i in range(5):
                 pyautogui.moveRel(20, 0)
 
     def evaluate(self):
