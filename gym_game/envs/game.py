@@ -48,9 +48,9 @@ class Game:
             return True
         return False
 
-    def observe(self):
+    def observe(self, device):
         # return observation data
-        return self.mine.screen()
+        return self.mine.screen(device)
 
     def view(self):
         # render game

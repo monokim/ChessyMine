@@ -16,8 +16,8 @@ def simulate():
     num_episodes = 100
     for epi in range(num_episodes):
         env.reset()
-        last_screen = util.get_screen(screen)
-        current_screen = util.get_screen(screen)
+        last_screen = util.get_screen(screen, device=device)
+        current_screen = util.get_screen(screen, device=device)
         state = current_screen - last_screen
         total_reward = 0
         for t in range(MAX_T):
@@ -26,7 +26,7 @@ def simulate():
             total_reward += reward
             reward = torch.tensor([reward], device=device)
             last_screen = current_screen
-            current_screen = util.get_screen(screen)
+            current_screen = util.get_screen(screen, device=device)
             if done:
                 next_state = None
             else:
@@ -97,11 +97,12 @@ if __name__ == "__main__":
     screen = (rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1])
     ###############################################
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     env = gym.make("Game-v0")
+    env.set_device(device)
     init_screen = util.get_screen(screen)
     _, _, height, width = init_screen.shape
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     n_actions = env.action_space.n
     policy_net = DQN(width, height, n_actions).to(device)
     target_net = DQN(width, height, n_actions).to(device)

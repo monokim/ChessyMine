@@ -53,8 +53,8 @@ class MyMinecraft:
         com = '/summon zombie 0 50 10 {IsBaby:0}'
         type_command(com)
 
-    def screen(self):
-        return get_screen(self.mc_rect)
+    def screen(self, device):
+        return get_screen(self.mc_rect, device=device)
 
     def press_resume(self):
         x1, y1, x2, y2 = self.mc_rect
