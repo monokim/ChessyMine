@@ -49,7 +49,7 @@ def optimize_model():
         return
     transition = memory.sample(BATCH_SIZE)
     batch = Transition(*zip(*transition))
-    non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)), device=device, dtype=torch.uint8)
+    non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, batch.next_state)), device=device, dtype=torch.bool)
     non_final_next_states = torch.cat([s for s in batch.next_state if s is not None])
     state_batch = torch.cat(batch.state)
     action_batch = torch.cat(batch.action)
@@ -82,7 +82,7 @@ def select_action(state):
 
 
 if __name__ == "__main__":
-    BATCH_SIZE = 50
+    BATCH_SIZE = 128
     GAMMA = 0.999
     EPS_START = 0.9
     EPS_END = 0.05
