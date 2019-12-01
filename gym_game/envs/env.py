@@ -34,8 +34,8 @@ class Env(gym.Env):
 
         self.counter += 1
         if self.counter > 30:
-            print("call zombie")
-            self.game.mine.call_zombie()
+            print("call mob")
+            self.game.mine.call_mob()
             self.counter = 0
 
         return obs, reward, done, {}
@@ -55,8 +55,9 @@ class Env(gym.Env):
         #self.game.mine.press_resume()
         time.sleep(1)
         self.game.mine.press_respawn()
+        self.game.mine.press_respawn()
         self.game.mine.erase_blocks()
         time.sleep(1)
         self.game.mine.create_duel_ring()
         self.game.mine.set_config()
-        self.game.mine.call_zombie()
+        self.game.mine.call_mob()

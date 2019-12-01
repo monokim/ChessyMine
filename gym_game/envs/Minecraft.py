@@ -32,10 +32,10 @@ class MyMinecraft:
 
         # set torch and fire
         for space in range(1, 15, 6):
-            self.mc.setBlock(x+1, y + 1, z+ space, 51)
-            self.mc.setBlock(x + ring_size[0] - 1, y + 1, z+ space, 51)
-            self.mc.setBlock(x+1, y + 1, z+ space, 50)
-            self.mc.setBlock(x + ring_size[0] - 1, y + 1, z+ space, 50)
+            self.mc.setBlock(x, y + 1, z+ space, 51)
+            self.mc.setBlock(x + ring_size[0], y + 1, z+ space, 51)
+            self.mc.setBlock(x, y + 1, z+ space, 50)
+            self.mc.setBlock(x + ring_size[0], y + 1, z+ space, 50)
 
     def erase_blocks(self):
         x = 0
@@ -45,11 +45,12 @@ class MyMinecraft:
         self.mc.setBlocks(x - erase_size, y-10, z - erase_size, x + erase_size, y + erase_size, z + erase_size, 0)
 
     def set_config(self):
-        command = ['/give mingoooose iron_sword', '/time set 15000']
+        time.sleep(0.5)
+        command = ['1qqq', '/give mingoooose iron_sword', '/time set 13000', '/weather clear']
         for comm in command:
             type_command(comm)
 
-    def call_zombie(self):
+    def call_mob(self):
         com = '/summon zombie 0 50 10 {IsBaby:0}'
         type_command(com)
 
@@ -63,19 +64,6 @@ class MyMinecraft:
     def press_respawn(self):
         x1, y1, x2, y2 = self.mc_rect
         click_point([(x1+x2) / 2, y1 + 320])
-
-    def get_strike(self):
-        return False
-        image = get_screen_color(self.mc_rect)
-        w, h, _ = image.shape
-        for y in range(h):
-            for x in range(w):
-                pixel = image[y][x]
-                if (pixel == [59,14,6]).all() or (pixel == [57, 11, 5]).all():
-                    print("strike")
-                    return True
-        print("no strike")
-        return False
 
     def get_health_bar(self):
         x, y, _, _ = self.mc_rect
@@ -94,6 +82,45 @@ class MyMinecraft:
             # next
             pos[0] += 11
         return health
+
+    def is_strike(self):
+        return false
+        image = get_screen_color(self.mc_rect)
+        w, h, _ = image.shape
+        for y in range(h):
+            for x in range(w):
+                pixel = image[y][x]
+                if (pixel == [59,14,6]).all() or (pixel == [57, 11, 5]).all():
+                    print("strike")
+                    return True
+        print("no strike")
+        return False
+
+    def check_zombie(self):
+        image = get_screen_color(self.mc_rect)
+        h, w, c = image.shape
+        center = [int(h / 2), int(w / 2)]
+        area = 25
+        r_avg = 0
+        g_avg = 0
+        b_avg = 0
+        for h in range(center[0] - area, center[0] + area):
+            for w in range(center[1] - area, center[1] + area):
+                r, g, b = image[h][w]
+                r_avg += r
+                g_avg += g
+                b_avg += b
+
+        r_avg /= (area * area * 2 * 2)
+        g_avg /= (area * area * 2 * 2)
+        b_avg /= (area * area * 2 * 2)
+
+        if r_avg < 70 and g_avg < 100 and b_avg < 100:
+            print("zombie detected")
+            return True
+
+        print("not detected")
+        return False
 
 # /op mingoooose
 # /give mingoooose iron_sword

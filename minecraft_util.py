@@ -48,12 +48,14 @@ def create_duel_ring(mc):
         mc.setBlocks(x + ring_size[0], y, z, x + ring_size[0], y+i, z + ring_size[1], 42)
         mc.setBlocks(x, y, z + ring_size[1], x + ring_size[0], y+i, z + ring_size[1], 42)
 
-    for space in range(1, 15, 6):
-        mc.setBlock(x+1, y + 1, z+ space, 51)
-        mc.setBlock(x + ring_size[0] - 1, y + 1, z+ space, 51)
 
-        mc.setBlock(x+1, y + 1, z+ space, 50)
-        mc.setBlock(x + ring_size[0] - 1, y + 1, z+ space, 50)
+    for space in range(1, 15, 6):
+        mc.setBlock(x, y + 1, z+ space, 51)
+        mc.setBlock(x + ring_size[0] , y + 1, z+ space, 51)
+
+        mc.setBlock(x, y + 1, z+ space, 50)
+        mc.setBlock(x + ring_size[0], y + 1, z+ space, 50)
+
 
 def erase_blocks(mc):
     x = 0

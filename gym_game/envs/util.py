@@ -5,13 +5,12 @@ import time
 import torch
 import win32gui
 
-def get_screen_color(screen, size=(64, 64)):
+def get_screen_color(screen):
     image = pyautogui.screenshot(region=screen)
     image = np.array(image)
-    image = cv2.resize(image, size)
     return image
 
-def get_screen(screen, size=(64, 64), device = None):
+def get_screen(screen, size=(256, 256), device = None):
     image = pyautogui.screenshot(region=screen)
     image = np.array(image)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)

@@ -13,6 +13,7 @@ class Game:
         self.mine = MyMinecraft()
         self.prev_health = 10
         self.cur_health = 10
+        self.screen = None
 
     def action(self, action):
         # do action
@@ -27,30 +28,46 @@ class Game:
         elif action == 4:
             click_point()
         elif action == 5:
-            for i in range(5):
-                pyautogui.moveRel(-20, 0)
+            pyautogui.moveRel(-100, 0)
+            click_point()
         elif action == 6:
-            for i in range(5):
-                pyautogui.moveRel(20, 0)
+            pyautogui.moveRel(100, 0)
+            click_point()
 
     def evaluate(self):
         # return reward
         reward = 0.1
+
+        # about targeting
+        if self.mine.check_zombie():
+            reward += 1
+
+        # does strike or not
+        """
+        if self.mine.is_strike():
+            reward += 10
+        """
+        # about health
+        """
         self.cur_health = self.mine.get_health_bar()
         if self.cur_health < self.prev_health:
             reward -= 10
         self.prev_health = self.cur_health
+        """
         return reward
 
     def is_done(self):
         # return episode is done or not
-        if self.cur_health == 0:
+        #if self.cur_health == 0:
+        if self.mine.get_health_bar() == 0:
             return True
         return False
 
     def observe(self, device):
         # return observation data
-        return self.mine.screen(device)
+        screen = self.mine.screen(device)
+        self.screen = screen
+        return screen
 
     def view(self):
         # render game
