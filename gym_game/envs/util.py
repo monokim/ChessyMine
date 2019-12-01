@@ -21,6 +21,7 @@ def get_screen(screen, size=(256, 256), device = None):
 def get_screen_rect(caption='Minecraft 1.11.2'):
     hwnd = win32gui.FindWindow(None, caption)
     rect = win32gui.GetWindowRect(hwnd)
+    screen_rect = (rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1])
     return rect
 
 def click_point(pos=None):

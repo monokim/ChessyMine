@@ -36,7 +36,7 @@ class Game:
 
     def evaluate(self):
         # return reward
-        reward = 0.1
+        reward = 1
 
         # about targeting
         if self.mine.check_zombie():

@@ -13,7 +13,7 @@ import gym_game.envs.util as util
 from dqn import DQN, ReplayMemory, Transition
 
 def simulate():
-    num_episodes = 100
+    num_episodes = 1000
     for epi in range(num_episodes):
         env.reset()
         last_screen = util.get_screen(screen, device=device)

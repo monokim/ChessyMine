@@ -100,7 +100,7 @@ class MyMinecraft:
         image = get_screen_color(self.mc_rect)
         h, w, c = image.shape
         center = [int(h / 2), int(w / 2)]
-        area = 25
+        area = 50
         r_avg = 0
         g_avg = 0
         b_avg = 0
@@ -115,7 +115,7 @@ class MyMinecraft:
         g_avg /= (area * area * 2 * 2)
         b_avg /= (area * area * 2 * 2)
 
-        if r_avg < 70 and g_avg < 100 and b_avg < 100:
+        if r_avg < 80 and g_avg < 80 and b_avg < 80:
             print("zombie detected")
             return True
 
