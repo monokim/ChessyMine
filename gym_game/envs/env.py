@@ -3,6 +3,7 @@ from gym import spaces
 import numpy as np
 from gym_game.envs.game import Game
 import time
+from util import Timer
 
 class Env(gym.Env):
     metadata = {'render.modes' : ['human']}
@@ -14,6 +15,7 @@ class Env(gym.Env):
         self.game = Game()
         self.memory = []
         self.counter = 0
+        self.timer = Timer()
 
     def set_device(self, device):
         self.device = device
@@ -27,10 +29,21 @@ class Env(gym.Env):
         return obs
 
     def step(self, action):
+        self.timer.set_timer("action")
         self.game.action(action)
+        self.timer.print_time("action")
+
+        self.timer.set_timer("evaluate")
         reward = self.game.evaluate()
+        self.timer.print_time("evaluate")
+
+        self.timer.set_timer("is_done")
         done = self.game.is_done()
+        self.timer.print_time("is_done")
+
+        self.timer.set_timer("observe")
         obs = self.game.observe(self.device)
+        self.timer.print_time("observe")
 
         self.counter += 1
         if self.counter > 30:

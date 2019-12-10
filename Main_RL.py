@@ -24,7 +24,11 @@ def simulate():
         total_reward = 0
         for t in range(MAX_T):
             action = select_action(state)
+
+            timer.set_timer("step")
             _, reward, done, _ = env.step(action.item())
+            timer.print_time("step")
+
             total_reward += reward
             reward = torch.tensor([reward], device=device)
             last_screen = current_screen

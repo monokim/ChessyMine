@@ -116,10 +116,10 @@ class MyMinecraft:
         b_avg /= (area * area * 2 * 2)
 
         if r_avg < 80 and g_avg < 80 and b_avg < 80:
-            print("zombie detected")
+            #print("zombie detected")
             return True
 
-        print("not detected")
+        #print("not detected")
         return False
 
 # /op mingoooose
