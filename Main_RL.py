@@ -4,13 +4,15 @@ import math
 import random
 import matplotlib.pyplot as plt
 
+from dqn import DQN, ReplayMemory, Transition
+from util import Timer
+
 import gym
 import gym_game
 import torch
 import torch.nn.functional as F
 import gym_game.envs.util as util
 
-from dqn import DQN, ReplayMemory, Transition
 
 def simulate():
     num_episodes = 1000
@@ -90,6 +92,7 @@ if __name__ == "__main__":
     TARGET_UPDATE = 10
     MAX_T = 9999
     steps_done = 0
+    timer = Timer()
 
     ###############################################
     # modify here!!
