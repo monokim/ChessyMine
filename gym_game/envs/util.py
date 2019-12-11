@@ -35,11 +35,3 @@ def type_command(comm):
     for c in comm:
         pyautogui.press(c)
     pyautogui.press('enter')
-
-def get_pixel(pos = None):
-    image = pyautogui.screenshot()
-    image = np.array(image)
-    if pos == None:
-        pos = pyautogui.position()
-    pixel = image[pos[1], pos[0]]
-    return [pixel[0], pixel[1], pixel[2]]

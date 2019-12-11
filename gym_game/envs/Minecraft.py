@@ -68,15 +68,16 @@ class MyMinecraft:
     def get_health_bar(self):
         x, y, _, _ = self.mc_rect
         health = 0
-        pos = [295 + x, 490 + y]
+        pos = [295, 490]
+        image = get_screen_color(self.mc_rect)
         for i in range(0, 10):
             # left
-            pixel = get_pixel(pos)
+            pixel = image[pos[1], pos[0]]
             if pixel == [255, 19, 19]:
                 health += 0.5
             # right
             pos[0] += 5
-            pixel = get_pixel(pos)
+            pixel = image[pos[1], pos[0]]
             if pixel == [255, 19, 19]:
                 health += 0.5
             # next
