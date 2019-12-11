@@ -22,12 +22,10 @@ def simulate():
         current_screen = util.get_screen(screen, device=device)
         state = current_screen - last_screen
         total_reward = 0
+        timer.set_timer("episode")
         for t in range(MAX_T):
             action = select_action(state)
-
-            timer.set_timer("step")
             _, reward, done, _ = env.step(action.item())
-            timer.print_time("step")
 
             total_reward += reward
             reward = torch.tensor([reward], device=device)
@@ -46,6 +44,7 @@ def simulate():
             if done:
                 print("episode %d, total reward = %f" % (epi + 1, total_reward))
                 break
+        timer.print_time("episode")
         if epi % TARGET_UPDATE == 0:
             target_net.load_state_dict(policy_net.state_dict())
 

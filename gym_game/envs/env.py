@@ -29,24 +29,13 @@ class Env(gym.Env):
         return obs
 
     def step(self, action):
-        self.timer.set_timer("action")
         self.game.action(action)
-        self.timer.print_time("action")
-
-        self.timer.set_timer("evaluate")
         reward = self.game.evaluate()
-        self.timer.print_time("evaluate")
-
-        self.timer.set_timer("is_done")
         done = self.game.is_done()
-        self.timer.print_time("is_done")
-
-        self.timer.set_timer("observe")
         obs = self.game.observe(self.device)
-        self.timer.print_time("observe")
 
         self.counter += 1
-        if self.counter > 30:
+        if self.counter > 100:
             print("call mob")
             self.game.mine.call_mob()
             self.counter = 0

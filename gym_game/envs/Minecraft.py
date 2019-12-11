@@ -3,7 +3,7 @@ from pyautogui import press, typewrite
 import pyautogui
 import time
 
-from gym_game.envs.util import type_command, click_point, get_screen_rect, get_screen, get_pixel, get_screen_color
+from gym_game.envs.util import type_command, click_point, get_screen_rect, get_screen, get_screen_color
 
 class MyMinecraft:
     def __init__(self):
@@ -72,13 +72,13 @@ class MyMinecraft:
         image = get_screen_color(self.mc_rect)
         for i in range(0, 10):
             # left
-            pixel = image[pos[1], pos[0]]
-            if pixel == [255, 19, 19]:
+            pixel = image[pos[1]][pos[0]]
+            if (pixel == [255, 19, 19]).all():
                 health += 0.5
             # right
             pos[0] += 5
             pixel = image[pos[1], pos[0]]
-            if pixel == [255, 19, 19]:
+            if (pixel == [255, 19, 19]).all():
                 health += 0.5
             # next
             pos[0] += 11
