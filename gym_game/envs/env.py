@@ -35,8 +35,7 @@ class Env(gym.Env):
         obs = self.game.observe(self.device)
 
         self.counter += 1
-        if self.counter > 100:
-            print("call mob")
+        if self.counter > 50:
             self.game.mine.call_mob()
             self.counter = 0
 

@@ -45,8 +45,10 @@ def simulate():
                 print("episode %d, total reward = %f" % (epi + 1, total_reward))
                 break
         timer.print_time("episode")
+        print("")
         if epi % TARGET_UPDATE == 0:
             target_net.load_state_dict(policy_net.state_dict())
+
 
 
 def optimize_model():
@@ -66,7 +68,7 @@ def optimize_model():
 
     expected_state_action_values = (next_state_values * GAMMA) + reward_batch
 
-    loss = F.smooth_l1_loss(state_action_values, expected_state_action_values.unsqueeze(1))
+    loss = F.smooth_l1_loss(state_action_values, expected_state_action_values.unsqueeze(1)).detach().item()
     optimizer.zero_grad()
     loss.backward()
     for param in policy_net.parameters():

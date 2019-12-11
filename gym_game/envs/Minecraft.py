@@ -45,12 +45,14 @@ class MyMinecraft:
         self.mc.setBlocks(x - erase_size, y-10, z - erase_size, x + erase_size, y + erase_size, z + erase_size, 0)
 
     def set_config(self):
+        print("set_config")
         time.sleep(0.5)
         command = ['1qqq', '/give mingoooose iron_sword', '/time set 13000', '/weather clear']
         for comm in command:
             type_command(comm)
 
     def call_mob(self):
+        print("call_mob")
         com = '/summon zombie 0 50 10 {IsBaby:0}'
         type_command(com)
 

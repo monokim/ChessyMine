@@ -33,5 +33,5 @@ def press_key(key):
 
 def type_command(comm):
     for c in comm:
-        pyautogui.press(c)
+        pyautogui.press(c, pause=0.05)
     pyautogui.press('enter')
