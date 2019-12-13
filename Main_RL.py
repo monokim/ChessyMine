@@ -27,7 +27,7 @@ def simulate():
             action = select_action(state)
             _, reward, done, _ = env.step(action.item())
 
-            total_reward += reward
+            total_reward += float(reward)
             reward = torch.tensor([reward], device=device)
             last_screen = current_screen
             current_screen = util.get_screen(screen, device=device)
@@ -68,7 +68,7 @@ def optimize_model():
 
     expected_state_action_values = (next_state_values * GAMMA) + reward_batch
 
-    loss = F.smooth_l1_loss(state_action_values, expected_state_action_values.unsqueeze(1)).detach().item()
+    loss = F.smooth_l1_loss(state_action_values, expected_state_action_values.unsqueeze(1))
     optimizer.zero_grad()
     loss.backward()
     for param in policy_net.parameters():
@@ -118,5 +118,5 @@ if __name__ == "__main__":
     target_net.eval()
 
     optimizer = torch.optim.RMSprop(policy_net.parameters())
-    memory = ReplayMemory(10000)
+    memory = ReplayMemory(3000)
     simulate()
