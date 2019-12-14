@@ -1,4 +1,24 @@
 import time
+import pyautogui
+import win32gui
+
+def get_screen_rect(caption='Minecraft 1.11.2'):
+    hwnd = win32gui.FindWindow(None, caption)
+    rect = win32gui.GetWindowRect(hwnd)
+    screen_rect = (rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1])
+    return rect
+
+def click_point(pos=None):
+    pyautogui.click(pos)
+
+def press_key(key):
+    pyautogui.keyDown(key)
+    pyautogui.keyUp(key)
+
+def type_command(comm):
+    for c in comm:
+        pyautogui.press(c, pause=0.05)
+    pyautogui.press('enter')
 
 class Timer():
     def __init__(self):

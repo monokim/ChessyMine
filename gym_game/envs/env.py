@@ -17,22 +17,19 @@ class Env(gym.Env):
         self.counter = 0
         self.timer = Timer()
 
-    def set_device(self, device):
-        self.device = device
-
     def reset(self):
         self.counter = 0
         del self.game
         self.game = Game()
         self.init_minecraft_process()
-        obs = self.game.observe(self.device)
+        obs = self.game.observe()
         return obs
 
     def step(self, action):
         self.game.action(action)
         reward = self.game.evaluate()
         done = self.game.is_done()
-        obs = self.game.observe(self.device)
+        obs = self.game.observe()
 
         self.counter += 1
         if self.counter > 50:

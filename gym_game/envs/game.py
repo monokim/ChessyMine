@@ -2,8 +2,12 @@ import numpy as np
 import time
 import random
 import pyautogui
-from gym_game.envs.Minecraft import MyMinecraft
-from gym_game.envs.util import press_key, click_point
+from . import MyMinecraft
+
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+from util import press_key, click_point
 
 
 ###############################################
@@ -13,7 +17,6 @@ class Game:
         self.mine = MyMinecraft()
         self.prev_health = 10
         self.cur_health = 10
-        self.screen = None
 
     def action(self, action):
         # do action
@@ -63,11 +66,9 @@ class Game:
             return True
         return False
 
-    def observe(self, device):
+    def observe(self):
         # return observation data
-        screen = self.mine.screen(device)
-        self.screen = screen
-        return screen
+        return self.mine.screen()
 
     def view(self):
         # render game

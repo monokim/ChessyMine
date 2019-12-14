@@ -5,21 +5,24 @@ import random
 import matplotlib.pyplot as plt
 
 from dqn import DQN, ReplayMemory, Transition
+from mornitor import Monitor
 from util import Timer
 
 import gym
 import gym_game
 import torch
 import torch.nn.functional as F
-import gym_game.envs.util as util
+import util
 
 
 def simulate():
     num_episodes = 1000
     for epi in range(num_episodes):
         env.reset()
-        last_screen = util.get_screen(screen, device=device)
-        current_screen = util.get_screen(screen, device=device)
+        #last_screen = util.get_screen(screen, device=device)
+        #current_screen = util.get_screen(screen, device=device)
+        last_screen = monitor.get_screen(pytorch=True, device=device)
+        current_screen = monitor.get_screen(pytorch=True, device=device)
         state = current_screen - last_screen
         total_reward = 0
         timer.set_timer("episode")
@@ -30,7 +33,7 @@ def simulate():
             total_reward += float(reward)
             reward = torch.tensor([reward], device=device)
             last_screen = current_screen
-            current_screen = util.get_screen(screen, device=device)
+            current_screen = monitor.get_screen(pytorch=True, device=device)
             if done:
                 next_state = None
             else:
@@ -98,16 +101,11 @@ if __name__ == "__main__":
     MAX_T = 9999
     steps_done = 0
     timer = Timer()
-
-    ###############################################
-    # modify here!!
     rect = util.get_screen_rect()
-    screen = (rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1])
-    ###############################################
-
+    region = (rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1])
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    monitor = Monitor(device, region)
     env = gym.make("Game-v0")
-    env.set_device(device)
     init_screen = util.get_screen(screen)
     _, _, height, width = init_screen.shape
 

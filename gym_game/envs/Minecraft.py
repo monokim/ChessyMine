@@ -2,14 +2,18 @@ from mcpi.minecraft import Minecraft
 from pyautogui import press, typewrite
 import pyautogui
 import time
+import numpy as np
 
-from gym_game.envs.util import type_command, click_point, get_screen_rect, get_screen, get_screen_color
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+from util import type_command, click_point, get_screen_rect
+from mornitor import Monitor
 
 class MyMinecraft:
     def __init__(self):
         self.mc = Minecraft.create()
         self.mc.setting("world_immutable", True)
         self.mc_rect = get_screen_rect()
+        self.monitor = Monitor(self.mc_rect)
 
     def create_duel_ring(self):
         self.erase_blocks()
@@ -30,12 +34,14 @@ class MyMinecraft:
             self.mc.setBlocks(x + ring_size[0], y, z, x + ring_size[0], y+i, z + ring_size[1], 42)
             self.mc.setBlocks(x, y, z + ring_size[1], x + ring_size[0], y+i, z + ring_size[1], 42)
 
+        """
         # set torch and fire
         for space in range(1, 15, 6):
             self.mc.setBlock(x, y + 1, z+ space, 51)
             self.mc.setBlock(x + ring_size[0], y + 1, z+ space, 51)
             self.mc.setBlock(x, y + 1, z+ space, 50)
             self.mc.setBlock(x + ring_size[0], y + 1, z+ space, 50)
+        """
 
     def erase_blocks(self):
         x = 0
@@ -47,17 +53,17 @@ class MyMinecraft:
     def set_config(self):
         print("set_config")
         time.sleep(0.5)
-        command = ['1qqq', '/give mingoooose iron_sword', '/time set 13000', '/weather clear']
+        command = ['1qqqqq', '/give mingoooose iron_sword', '/time set 100', '/weather clear']
         for comm in command:
             type_command(comm)
 
     def call_mob(self):
         print("call_mob")
-        com = '/summon zombie 0 50 10 {IsBaby:0}'
+        com = '/summon husk 0 50 10 {IsBaby:0}'
         type_command(com)
 
-    def screen(self, device):
-        return get_screen(self.mc_rect, device=device)
+    def screen(self):
+        return monitor.get_screen(pytorch=True)
 
     def press_resume(self):
         x1, y1, x2, y2 = self.mc_rect
@@ -71,7 +77,7 @@ class MyMinecraft:
         x, y, _, _ = self.mc_rect
         health = 0
         pos = [295, 490]
-        image = get_screen_color(self.mc_rect)
+        image = monitor.get_screen()
         for i in range(0, 10):
             # left
             pixel = image[pos[1]][pos[0]]
@@ -86,45 +92,23 @@ class MyMinecraft:
             pos[0] += 11
         return health
 
-    def is_strike(self):
-        return false
-        image = get_screen_color(self.mc_rect)
-        w, h, _ = image.shape
-        for y in range(h):
-            for x in range(w):
-                pixel = image[y][x]
-                if (pixel == [59,14,6]).all() or (pixel == [57, 11, 5]).all():
-                    print("strike")
-                    return True
-        print("no strike")
-        return False
-
     def check_zombie(self):
-        image = get_screen_color(self.mc_rect)
-        h, w, c = image.shape
-        center = [int(h / 2), int(w / 2)]
-        area = 50
-        r_avg = 0
-        g_avg = 0
-        b_avg = 0
-        for h in range(center[0] - area, center[0] + area):
-            for w in range(center[1] - area, center[1] + area):
-                r, g, b = image[h][w]
-                r_avg += r
-                g_avg += g
-                b_avg += b
+        image = monitor.get_check_screen()
+        arr = np.nonzero(image)
+        """
+        avg_h = 0
+        avg_w = 0
+        avg_cnt = 0
+        for h in range(H):
+            for w in range(W):
+                if image.item(h, w) == 0:
+                    avg_h += h
+                    avg_w += w
+                    avg_cnt += 1
 
-        r_avg /= (area * area * 2 * 2)
-        g_avg /= (area * area * 2 * 2)
-        b_avg /= (area * area * 2 * 2)
-
-        if r_avg < 80 and g_avg < 80 and b_avg < 80:
-            #print("zombie detected")
-            return True
-
-        #print("not detected")
-        return False
-
-# /op mingoooose
-# /give mingoooose iron_sword
-# /summon zombie 0 50 20
+        if avg_cnt > 10:
+            avg_h = int(avg_h / avg_cnt)
+            avg_w = int(avg_w / avg_cnt)
+            return True, [avg_w, avg_h]
+        """
+        return False, [0, 0]
