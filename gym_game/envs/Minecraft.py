@@ -2,6 +2,8 @@ from mcpi.minecraft import Minecraft
 from pyautogui import press, typewrite
 import pyautogui
 import time
+import sys
+import os
 import numpy as np
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
@@ -13,7 +15,7 @@ class MyMinecraft:
         self.mc = Minecraft.create()
         self.mc.setting("world_immutable", True)
         self.mc_rect = get_screen_rect()
-        self.monitor = Monitor(self.mc_rect)
+        self.monitor = Monitor.get_instance()
 
     def create_duel_ring(self):
         self.erase_blocks()
@@ -53,7 +55,7 @@ class MyMinecraft:
     def set_config(self):
         print("set_config")
         time.sleep(0.5)
-        command = ['1qqqqq', '/give mingoooose iron_sword', '/time set 100', '/weather clear']
+        command = ['/clear', '/give @a iron_sword', '/time set 1000', '/weather clear']
         for comm in command:
             type_command(comm)
 
@@ -63,7 +65,7 @@ class MyMinecraft:
         type_command(com)
 
     def screen(self):
-        return monitor.get_screen(pytorch=True)
+        return self.monitor.get_screen(pytorch=True)
 
     def press_resume(self):
         x1, y1, x2, y2 = self.mc_rect
@@ -77,7 +79,7 @@ class MyMinecraft:
         x, y, _, _ = self.mc_rect
         health = 0
         pos = [295, 490]
-        image = monitor.get_screen()
+        image = self.monitor.get_screen()
         for i in range(0, 10):
             # left
             pixel = image[pos[1]][pos[0]]
@@ -93,22 +95,17 @@ class MyMinecraft:
         return health
 
     def check_zombie(self):
-        image = monitor.get_check_screen()
+        image = self.monitor.get_check_screen()
         arr = np.nonzero(image)
-        """
         avg_h = 0
         avg_w = 0
-        avg_cnt = 0
-        for h in range(H):
-            for w in range(W):
-                if image.item(h, w) == 0:
-                    avg_h += h
-                    avg_w += w
-                    avg_cnt += 1
+        if len(arr[0]) > 0:
+            #avg_h = int(np.sum(arr[0]) / len(arr[0]))
+            avg_w = int(np.sum(arr[1]) / len(arr[1]))
+            if avg_w >= (self.mc_rect[2] / 2) - 100 and avg_w <= (self.mc_rect[2] / 2) + 100:
+                return True
 
-        if avg_cnt > 10:
-            avg_h = int(avg_h / avg_cnt)
-            avg_w = int(avg_w / avg_cnt)
-            return True, [avg_w, avg_h]
-        """
-        return False, [0, 0]
+        return False
+
+    def show_screen(self):
+        self.monitor.show_screen()

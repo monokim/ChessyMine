@@ -19,21 +19,20 @@ def simulate():
     num_episodes = 1000
     for epi in range(num_episodes):
         env.reset()
-        #last_screen = util.get_screen(screen, device=device)
-        #current_screen = util.get_screen(screen, device=device)
-        last_screen = monitor.get_screen(pytorch=True, device=device)
-        current_screen = monitor.get_screen(pytorch=True, device=device)
+        last_screen = monitor.get_screen(pytorch=True)
+        current_screen = monitor.get_screen(pytorch=True)
         state = current_screen - last_screen
         total_reward = 0
         timer.set_timer("episode")
         for t in range(MAX_T):
+            monitor.caputre_screen()
             action = select_action(state)
             _, reward, done, _ = env.step(action.item())
 
             total_reward += float(reward)
             reward = torch.tensor([reward], device=device)
             last_screen = current_screen
-            current_screen = monitor.get_screen(pytorch=True, device=device)
+            current_screen = monitor.get_screen(pytorch=True)
             if done:
                 next_state = None
             else:
@@ -42,11 +41,13 @@ def simulate():
             memory.push(state, action, next_state, reward)
             state = next_state
 
+            env.render()
             optimize_model()
 
             if done:
                 print("episode %d, total reward = %f" % (epi + 1, total_reward))
                 break
+
         timer.print_time("episode")
         print("")
         if epi % TARGET_UPDATE == 0:
@@ -106,7 +107,7 @@ if __name__ == "__main__":
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     monitor = Monitor(device, region)
     env = gym.make("Game-v0")
-    init_screen = util.get_screen(screen)
+    init_screen = monitor.get_screen(pytorch=True)
     _, _, height, width = init_screen.shape
 
     n_actions = env.action_space.n

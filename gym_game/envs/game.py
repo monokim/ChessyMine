@@ -2,7 +2,7 @@ import numpy as np
 import time
 import random
 import pyautogui
-from . import MyMinecraft
+from . import Minecraft
 
 import os
 import sys
@@ -14,7 +14,7 @@ from util import press_key, click_point
 # modify here!!!
 class Game:
     def __init__(self):
-        self.mine = MyMinecraft()
+        self.mine = Minecraft.MyMinecraft()
         self.prev_health = 10
         self.cur_health = 10
 
@@ -32,31 +32,31 @@ class Game:
             click_point()
         elif action == 5:
             pyautogui.moveRel(-100, 0)
-            click_point()
         elif action == 6:
             pyautogui.moveRel(100, 0)
-            click_point()
 
     def evaluate(self):
         # return reward
         reward = 1
 
         # about targeting
-        if self.mine.check_zombie():
-            reward += 1
-
-        # does strike or not
         """
+        if self.mine.check_zombie():
+            print("detected")
+            reward += 1
+        else:
+            print("not detected")
+        # does strike or not
+
         if self.mine.is_strike():
             reward += 10
         """
         # about health
-        """
         self.cur_health = self.mine.get_health_bar()
         if self.cur_health < self.prev_health:
             reward -= 10
         self.prev_health = self.cur_health
-        """
+
         return reward
 
     def is_done(self):
@@ -72,5 +72,6 @@ class Game:
 
     def view(self):
         # render game
-        pass
+        self.mine.show_screen()
+        #pass
 ###############################################
