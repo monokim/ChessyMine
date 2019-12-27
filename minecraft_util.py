@@ -39,8 +39,8 @@ def create_ring(mc):
 def create_duel_ring(mc):
     mc.player.setPos(0, 50, 0)
     pos = mc.player.getPos()
-    ring_size = [5, 14]
-    x = int(pos.x) - 3
+    ring_size = [20, 20]
+    x = int(pos.x) - 10
     y = int(pos.y) - 1
     z = int(pos.z) - 2
     mc.setBlocks(x, y, z, x + ring_size[0], y, z + ring_size[1], 42)
@@ -72,7 +72,7 @@ def erase_blocks(mc):
     mc.setBlocks(x - erase_size, y-1, z - erase_size, x + erase_size, y + erase_size, z + erase_size, 0)
 
 mc = Minecraft.create()
-mc.setting("world_immutable", True)
+#mc.setting("world_immutable", False)
 erase_blocks(mc)
 create_duel_ring(mc)
 #create_ring(mc, mc.player.getPos())

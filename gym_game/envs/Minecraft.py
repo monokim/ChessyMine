@@ -13,7 +13,7 @@ from mornitor import Monitor
 class MyMinecraft:
     def __init__(self):
         self.mc = Minecraft.create()
-        self.mc.setting("world_immutable", True)
+        #self.mc.setting("world_immutable", True)
         self.mc_rect = get_screen_rect()
         self.monitor = Monitor.get_instance()
 
@@ -21,8 +21,8 @@ class MyMinecraft:
         self.erase_blocks()
         self.mc.player.setPos(0, 50, 0)
         pos = self.mc.player.getPos()
-        ring_size = [5, 14]
-        x = int(pos.x) - 3
+        ring_size = [20, 20]
+        x = int(pos.x) - 10
         y = int(pos.y) - 1
         z = int(pos.z) - 2
 
@@ -55,14 +55,20 @@ class MyMinecraft:
     def set_config(self):
         print("set_config")
         time.sleep(0.5)
-        command = ['/clear', '/give @a iron_sword', '/time set 1000', '/weather clear']
+        command = ['/clear', '/give @a dirt 64', '/time set 1000', '/weather clear']
         for comm in command:
             type_command(comm)
 
     def call_mob(self):
-        print("call_mob")
-        com = '/summon husk 0 50 10 {IsBaby:0}'
-        type_command(com)
+        #print("call_mob")
+        #com = '/summon husk ~15 ~1 ~15 {HandItems:[{Count:1,id:diamond_axe},{}]}'
+        #type_command(com)
+        pyautogui.press('t', pause=0.1)
+        pyautogui.keyDown('ctrl')
+        pyautogui.press('v')
+        pyautogui.keyUp('ctrl')
+        pyautogui.press('enter', pause=0.1)
+
 
     def screen(self):
         return self.monitor.get_screen(pytorch=True)

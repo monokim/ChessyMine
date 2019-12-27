@@ -8,12 +8,14 @@ def get_screen_rect(caption='Minecraft 1.11.2'):
     screen_rect = (rect[0], rect[1], rect[2] - rect[0], rect[3] - rect[1])
     return rect
 
-def click_point(pos=None):
-    pyautogui.click(pos)
+def click_point(pos=None, left=True):
+    if left:
+        pyautogui.click(pos)
+    else:
+        pyautogui.rightClick(pos)
 
 def press_key(key):
-    pyautogui.keyDown(key)
-    pyautogui.keyUp(key)
+    pyautogui.press(key, pause=0.01)
 
 def type_command(comm):
     for c in comm:

@@ -41,7 +41,7 @@ def simulate():
             memory.push(state, action, next_state, reward)
             state = next_state
 
-            env.render()
+            #env.render()
             optimize_model()
 
             if done:

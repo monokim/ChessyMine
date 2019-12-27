@@ -10,7 +10,7 @@ class Env(gym.Env):
     def __init__(self):
         ###############################################
         # modify here!!!
-        self.action_space = spaces.Discrete(7)
+        self.action_space = spaces.Discrete(10)
         ###############################################
         self.game = Game()
         self.memory = []
@@ -30,6 +30,7 @@ class Env(gym.Env):
         reward = self.game.evaluate()
         done = self.game.is_done()
         obs = self.game.observe()
+
 
         self.counter += 1
         if self.counter > 100:

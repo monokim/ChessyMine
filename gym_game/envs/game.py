@@ -20,6 +20,7 @@ class Game:
 
     def action(self, action):
         # do action
+        move = 30
         if action == 0:
             press_key('w')
         elif action == 1:
@@ -31,13 +32,19 @@ class Game:
         elif action == 4:
             click_point()
         elif action == 5:
-            pyautogui.moveRel(-100, 0)
+            click_point(left=False)
         elif action == 6:
-            pyautogui.moveRel(100, 0)
+            pyautogui.moveRel(-move, 0)
+        elif action == 7:
+            pyautogui.moveRel(move, 0)
+        elif action == 8:
+            pyautogui.moveRel(0, -move)
+        elif action == 9:
+            pyautogui.moveRel(0, move)
 
     def evaluate(self):
         # return reward
-        reward = 1
+        reward = 0.1
 
         # about targeting
         """
@@ -50,12 +57,13 @@ class Game:
 
         if self.mine.is_strike():
             reward += 10
-        """
         # about health
         self.cur_health = self.mine.get_health_bar()
-        if self.cur_health < self.prev_health:
+        if self.prev_health - self.cur_health >= 1:
             reward -= 10
-        self.prev_health = self.cur_health
+            self.prev_health = self.cur_health
+
+        """
 
         return reward
 
